@@ -72,13 +72,23 @@ person = pd.DataFrame(columns = ['LocalID',
 
 #   Adding a person to the person dataframe as outlined by the columns above:
 person = person.append(pd.Series(['1','Satya','','','Nadella','','Microsoft Corp','',''], 
-                                 index=person.columns),ignore_index=True)
+                                 index = person.columns), ignore_index = True)
 person = person.append(pd.Series(['2','Satya','','','Nadella','4295907168','','',''], 
-                                 index=person.columns),ignore_index=True)
+                                 index = person.columns), ignore_index = True)
 person = person.append(pd.Series(['3','Martin','','','Jetter','','International Business Machines Corp','',''], 
-                                 index=person.columns),ignore_index=True)
+                                 index = person.columns), ignore_index = True)
 person = person.append(pd.Series(['4','Bill','','','Gates','','Microsoft Corp','',''], 
-                                 index=person.columns),ignore_index=True)
+                                 index = person.columns), ignore_index = True)
 
-out2,err2 = opid.match(person, dataType='Person')
+out2, err2 = opid.match(person, dataType='Person')
 print(out2)
+
+#   Creation of quotation data for matching
+quotation="""
+LocalID,Standard Identifier
+1,RIC:IBM.N|Ticker:IBM
+2,Ticker:MSFT
+3,RIC:IBM.N&&Ticker:IBM
+"""
+out3, err3 = opid.match(quotation, dataType = 'Quotation', raw_output = True)
+print(out3)
