@@ -28,7 +28,7 @@ opid.set_access_token("<API KEY HERE>")
 This function will return a tuple containing a result and error string.
 
 Parameter Name      Required               Description
-    yes                 yes     A CSV string or dataframe for matching.
+    data                yes     A CSV string or dataframe for matching.
     dataType            no      Type of entitty to search for.  Possible values:
                                     Person
                                     Organization (Default)
