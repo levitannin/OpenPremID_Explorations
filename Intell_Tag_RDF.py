@@ -22,7 +22,7 @@ import json
 #   Cannot rename in the import call.
 opid = OpenPermID()
 #   API Initialization
-opid.set_access_token("5736zxaoa0nol4cGGHuz7XWzYtG2jevt")
+opid.set_access_token("<APIKEY>")
 
 #   The following is the format for passing text and intelligently tagging it using calais.
 #opid.calais(text, language = 'English', contentType = 'raw', outputFormat = 'json')
