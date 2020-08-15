@@ -16,13 +16,12 @@ JSON format didn't work.  Looking into RDFlib, SPARQL Protocol and RDF Query
 
 from OpenPermID import OpenPermID
 import rdflib
-from SPARQLWrapper import SPARQLWrapper, JSON
 import json
 
 #   Cannot rename in the import call.
 opid = OpenPermID()
 #   API Initialization
-opid.set_access_token("<APIKEY>")
+opid.set_access_token("<API KEY>")
 
 #   The following is the format for passing text and intelligently tagging it using calais.
 #opid.calais(text, language = 'English', contentType = 'raw', outputFormat = 'json')
@@ -74,25 +73,26 @@ S 256Gb659 Samsungstore - 2020
 #   json does not return necessary tagging space; i.e.: Social Tag.  Needed to
 #       use rdf format which is rdf/xml format.
 out1, err1 = opid.calais(scrapedText, outputFormat = "rdf")
-#print(out1)
 
 #   This area is to test how to use the RDFlib to parse RDF file formats.
-
-'''sparql = SPARQLWrapper(out1)
-sparql.setQuery("""
-    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-    SELECT ?label
-    WHERE { out1 rdfs:label ?label }
-""")
-sparql.setReturnFormat(JSON)
-results = sparql.query().convert()
-
-for result in results["results"]["bindings"]:
-    print(result["label"]["value"])'''
-    
+#create graph object    
 graph = rdflib.Graph()
-graph.parse(out1, format = 'application/rdf+xml')
-graph.serialize(out1, format = 'application/json-ld')
 
-pj = json.dumps(graph, indent=2)
-print(pj)
+#parse graph
+graph.parse(out1, format = 'xml')
+
+#convert to a json file and write to "test.json"
+graph.serialize("test.json", format = 'json-ld')
+
+#open json file to pull things out of
+with open("test.json", "r") as f:
+  
+    json_file = json.load(f)
+    final_list = []
+    #go through each top level json object
+    #pull out the values we want
+    for x in json_file:
+        if x["@type"][0] == 'http://s.opencalais.com/1/type/tag/SocialTag':
+            hash_value = x["http://s.opencalais.com/1/pred/socialtag"][0]["@id"] 
+            text = x["http://s.opencalais.com/1/pred/name"][0]["@value"]
+            final_list.append([hash_value, text]) 
